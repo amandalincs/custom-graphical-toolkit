@@ -21,34 +21,34 @@ var MyToolkit = (function() {
         var clickEvent = null;
         var stateChange = null;
 
-        rect.mouseover(function(event){
-            this.fill({ color: light_teal});
+        group.mouseover(function(event){
+            rect.fill({ color: light_teal});
             if (stateChange != null)
                 stateChange(event);
-        })
+        });
         
-        rect.mouseout(function(event){
-            this.fill({ color: teal});
+        group.mouseout(function(event){
+            rect.fill({ color: teal});
             if (stateChange != null)
                 stateChange(event);
-        })
+        });
 
-        rect.mouseup(function(event){
-            this.fill({ color: teal});
+        group.mouseup(function(event){
+            rect.fill({ color: teal});
             if (stateChange != null)
                 stateChange(event);
-        })
+        });
 
-        rect.mousedown(function(event){
-            this.fill({ color: dark_teal});
+        group.mousedown(function(event){
+            rect.fill({ color: dark_teal});
             if (stateChange != null)
                 stateChange(event);
-        })
+        });
 
-        rect.click(function(event){
+        group.click(function(event){
             if(clickEvent != null)
                 clickEvent(event);
-        })
+        });
 
         return {
             move: function(x, y) {
@@ -63,8 +63,8 @@ var MyToolkit = (function() {
             setLabel: function(newText) {
                 text.text(newText);
             }
-        }
-    }
+        };
+    };
 return {Button}
 }());
 
