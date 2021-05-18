@@ -2,7 +2,7 @@ import {MyToolkit} from './mytoolkit.js';
 
 // Implement a MyToolkit Button
 var btn = new MyToolkit.Button;
-btn.move(100, 0);
+btn.move(100, 40);
 btn.setLabel("Click Me!");
 btn.onClick(function(e){
 	console.log(e.type);
@@ -13,7 +13,7 @@ btn.onStateChange(function(e) {
 
 // Implement a MyToolkit Checkbox
 var checkbox = new MyToolkit.Checkbox;
-checkbox.move(300, 10);
+checkbox.move(300, 50);
 checkbox.setLabel("Check Me!");
 checkbox.onCheck(function(checkStatus) {
     console.log(checkStatus);
@@ -29,7 +29,7 @@ checkbox.onStateChange(function(e) {
 
 // Implement a MyToolkit RadioGroup
 var radioGroup = new MyToolkit.RadioGroup(4);
-radioGroup.move(500, 10);
+radioGroup.move(500, 50);
 radioGroup.setLabel(1, "Option 1");
 radioGroup.setLabel(2, "Option 2");
 radioGroup.setLabel(3, "Option 3");
@@ -43,11 +43,23 @@ radioGroup.onStateChange(function(e) {
 
 // Implement a MyToolkit TextBox
 var textBox = new MyToolkit.TextBox;
-textBox.move(700, 10);
+textBox.move(700, 50);
 textBox.onTextChange(function(textStatus) {
     console.log(textStatus)
     console.log(textBox.getText());
 })
 textBox.onStateChange(function(e) {
+    console.log(e.type);
+});
+
+// Implement a MyToolkit Scrollbar
+var scrollbar = new MyToolkit.Scrollbar;
+scrollbar.move(100, 200);
+scrollbar.setHeight(300);
+scrollbar.onThumbMove(function(thumbStatus) {
+    console.log(thumbStatus);
+    console.log(scrollbar.getThumbPosition());
+})
+scrollbar.onStateChange(function(e) {
     console.log(e.type);
 });

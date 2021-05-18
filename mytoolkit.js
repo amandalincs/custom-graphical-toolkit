@@ -4,13 +4,14 @@ const teal = '#449D91';
 const light_teal = '#6EBEB3';
 const dark_teal = '#2B8A7D';
 const white = '#FFFFFF';
-const yellow = '#FAC86D'
+const lightest_teal = '#A5DED6';
+
+const draw = SVG().addTo('body').size('100%','100%');
+draw.height(700)
 
 var MyToolkit = (function() {
     var Button = function(){
-        var draw = SVG().addTo('body').size('100%','100%');
         var group = draw.group();
-        draw.height(80);
 
         var rect = group.rect(125,50).fill(teal).radius(5);
         var text = group.text("Button").font({
@@ -70,9 +71,7 @@ var MyToolkit = (function() {
     };
 
     var Checkbox = function() {
-        var draw = SVG().addTo('body').size('100%','100%');
         var group = draw.group();
-        draw.height(50);
 
         var rect = group.rect(20, 20).fill(white).radius(3);
         rect.stroke({ color: teal, width: 3 });
@@ -145,9 +144,7 @@ var MyToolkit = (function() {
     };
 
     var RadioGroup = function(numButtons = 2) {
-        var draw = SVG().addTo('body').size('100%','100%');
         var radioGroup = draw.group();
-        draw.height(numButtons*30 + 10);
 
         var checkEvent = null;
         var stateChange = null;
@@ -231,7 +228,6 @@ var MyToolkit = (function() {
     };
 
     var TextBox = function() {
-        var draw = SVG().addTo('body').size('100%','100%');
         var group = draw.group();
 
         var rect = group.rect(200, 30).fill(white).radius(5);
@@ -338,7 +334,74 @@ var MyToolkit = (function() {
             }
         };
     };
-return {Button, Checkbox, RadioGroup, TextBox}
+
+    var Scrollbar = function() {
+        var group = draw.group();
+
+        var bar = group.rect(20, 300).fill(lightest_teal).radius(5);
+        var thumb = group.rect(12, bar.height()/4).fill(teal).radius(5).cx(10).y(2);
+
+        var isDragged = false;
+        var thumbMove = null;
+        var stateChange = null;
+
+        thumb.mousedown(function(event) {
+            isDragged = true;
+            thumb.fill({ color: light_teal});
+            if (stateChange != null)
+                stateChange(event);
+        });
+
+        thumb.mouseover(function(event) {
+            if (stateChange != null)
+                stateChange(event);
+        });
+
+        thumb.mouseup(function(event) {
+            if (stateChange != null)
+                stateChange(event);
+        });
+
+        thumb.mouseout(function(event) {
+            if (stateChange != null)
+                stateChange(event);
+        });
+
+        SVG.on(document, 'mousemove', function(event) {
+            if (isDragged) {
+                if (event.offsetY > bar.y() && event.offsetY < bar.height() + 125) {
+                    thumb.y(event.offsetY);
+                }
+                if (thumbMove != null) {
+                    thumbMove("thumb moved");
+                }
+            }
+        });
+
+        SVG.on(document, 'mouseup', function(event) {
+            isDragged = false;
+            thumb.fill({ color: teal});
+        });
+
+        return {
+            move: function(x, y) {
+                group.move(x, y);
+            },
+            onThumbMove: function(eventHandler) {
+                thumbMove = eventHandler;
+            },
+            setHeight: function(newHeight) {
+                bar.height(newHeight);
+            },
+            getThumbPosition: function() {
+                return thumb.x() + ", " + thumb.y();
+            },
+            onStateChange: function(eventHandler) {
+                stateChange = eventHandler;
+            },
+        };
+    };
+return {Button, Checkbox, RadioGroup, TextBox, Scrollbar}
 }());
 
 export{MyToolkit}
