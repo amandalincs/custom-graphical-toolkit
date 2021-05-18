@@ -71,6 +71,7 @@ var MyToolkit = (function() {
     var Checkbox = function() {
         var draw = SVG().addTo('body').size('100%','100%');
         var group = draw.group();
+        draw.height(80);
 
         var rect = group.rect(20, 20).fill('#fff').radius(3);
         rect.stroke({ color: teal, width: 3 });
@@ -110,7 +111,7 @@ var MyToolkit = (function() {
 
         rect.click(function(event) {
             if (!isChecked) {
-                this.fill({ color: yellow});
+                this.fill({ color: light_teal});
                 isChecked = true;
             } else {
                 this.fill({ color: white })
@@ -141,7 +142,93 @@ var MyToolkit = (function() {
             }
         };
     };
-return {Button, Checkbox}
+
+    var RadioGroup = function(numButtons = 2) {
+        var draw = SVG().addTo('body').size('100%','100%');
+        var radioGroup = draw.group();
+        draw.height(numButtons*30 + 10);
+
+        var checkEvent = null;
+        var stateChange = null;
+
+        for (var i = 0; i < numButtons; i++) {
+            let radioButton = radioGroup.group();
+            let circle = radioButton.circle(20).fill(white);
+            circle.stroke({ color: teal, width: 3 })
+            circle.data('buttonIndex', i)
+            let text = radioButton.text("Radio").font({
+                family: 'Gill Sans',
+                size: 18,
+                fill: teal
+            }).attr({ x: 35, y: -7});
+            radioButton.y(i*30);
+
+            circle.click(function(event) {
+                let buttonIndex = this.data('buttonIndex');    
+                let allButtons = radioGroup.children();
+
+                for (var j = 0; j < numButtons; j++) {
+                    let buttonCircle = allButtons[j].get(0);
+                    if (buttonCircle.data('buttonIndex') == buttonIndex) {
+                        buttonCircle.fill({ color: light_teal});
+                    } else {
+                        buttonCircle.fill({ color: white});
+                    }
+                }
+
+                if (checkEvent != null) {
+                    let displayIndex = buttonIndex + 1;
+                    checkEvent("button " + displayIndex + " checked");
+                }
+            });
+
+            circle.mouseover(function(event) {
+                this.stroke({ color: light_teal });
+                if (stateChange != null)
+                    stateChange(event);
+            });
+
+            circle.mouseout(function(event) {
+                this.stroke({ color: teal });
+                if (stateChange != null)
+                    stateChange(event);
+            });
+
+            circle.mouseup(function(event) {
+                this.stroke({ color: teal });
+                if (stateChange != null)
+                    stateChange(event);
+            });
+
+            circle.mousedown(function(event) {
+                if (stateChange != null)
+                    stateChange(event);
+            });
+        }
+
+        return {
+            move: function(x, y) {
+                radioGroup.move(x, y);
+            },
+            onCheck: function(eventHandler) {
+                checkEvent = eventHandler;
+            },
+            onStateChange: function(eventHandler) {
+                stateChange = eventHandler;
+            },
+            setLabel: function(index, newText) {
+                let allButtons = radioGroup.children();
+                for (var i = 0; i < numButtons; i++) {
+                    let buttonText = allButtons[i].get(1);
+                    if (i == index-1) {
+                        buttonText.text(newText);
+                    }
+                }
+            }
+        };
+
+    };
+return {Button, Checkbox, RadioGroup}
 }());
 
 export{MyToolkit}
