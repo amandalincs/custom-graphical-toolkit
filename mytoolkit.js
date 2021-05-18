@@ -472,7 +472,82 @@ var MyToolkit = (function() {
             }
         };
     };
-return {Button, Checkbox, RadioGroup, TextBox, Scrollbar, ProgressBar}
+
+    var Toggle = function() {
+        var group = draw.group();
+
+        var button = group.rect(100, 50).fill(lightest_teal).radius(25);
+        var toggle = group.rect(40, 40).fill(white).radius(20).x(5).y(5);
+
+        var toggleEvent = null;
+        var stateChange = null;
+        var isOn = false;
+
+        toggle.mouseover(function(event) {
+            if (stateChange != null)
+                stateChange(event);
+        });
+
+        toggle.mouseout(function(event) {
+            if (stateChange != null)
+                stateChange(event);
+        });
+
+        toggle.mouseup(function(event){
+            if (stateChange != null)
+                stateChange(event);
+        });
+
+        toggle.mousedown(function(event){
+            if (stateChange != null)
+                stateChange(event);
+        });
+
+        toggle.click(function(event) {
+            if (!isOn) {
+                toggle.animate({
+                    duration: 500,
+                    when:'now',
+                }).dx(50);
+                button.animate({
+                    duration: 500,
+                    when:'now'
+                }).fill(teal);
+                isOn = true;
+            } else {
+                toggle.animate({
+                    duration: 500,
+                    when:'now',
+                }).dx(-50);
+                button.animate({
+                    duration: 500,
+                    when:'now'
+                }).fill(lightest_teal);
+                isOn = false;
+            }
+
+            if (toggleEvent != null) {
+                if (!isOn) {
+                    toggleEvent("toggle off");
+                } else {
+                    toggleEvent("toggle on");
+                }
+            }
+        });
+
+        return {
+            move: function(x, y) {
+                group.move(x, y);
+            },
+            onToggle: function(eventHandler) {
+                toggleEvent = eventHandler;
+            },
+            onStateChange: function(eventHandler) {
+                stateChange = eventHandler;
+            }
+        };
+    };
+return {Button, Checkbox, RadioGroup, TextBox, Scrollbar, ProgressBar, Toggle}
 }());
 
 export{MyToolkit}

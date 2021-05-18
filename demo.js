@@ -54,7 +54,7 @@ textBox.onStateChange(function(e) {
 
 // Implement a MyToolkit Scrollbar
 var scrollbar = new MyToolkit.Scrollbar;
-scrollbar.move(100, 200);
+scrollbar.move(150, 200);
 scrollbar.setHeight(300);
 scrollbar.onThumbMove(function(thumbStatus) {
     console.log(thumbStatus);
@@ -75,5 +75,15 @@ progressBar.onIncrement(function(incrementStatus) {
     console.log(incrementStatus);
 })
 progressBar.onStateChange(function(e) {
+    console.log(e.type);
+});
+
+// Implement a MyToolkit Toggle
+var toggle = new MyToolkit.Toggle;
+toggle.move(750, 300);
+toggle.onToggle(function(toggleStatus) {
+    console.log(toggleStatus);
+})
+toggle.onStateChange(function(e) {
     console.log(e.type);
 });
