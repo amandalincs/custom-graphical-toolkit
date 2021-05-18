@@ -10,6 +10,7 @@ var MyToolkit = (function() {
     var Button = function(){
         var draw = SVG().addTo('body').size('100%','100%');
         var group = draw.group();
+        draw.height(80);
 
         var rect = group.rect(125,50).fill(teal).radius(5);
         var text = group.text("Button").font({
@@ -71,9 +72,9 @@ var MyToolkit = (function() {
     var Checkbox = function() {
         var draw = SVG().addTo('body').size('100%','100%');
         var group = draw.group();
-        draw.height(80);
+        draw.height(50);
 
-        var rect = group.rect(20, 20).fill('#fff').radius(3);
+        var rect = group.rect(20, 20).fill(white).radius(3);
         rect.stroke({ color: teal, width: 3 });
 
         var text = group.text("Checkbox").font({
@@ -228,7 +229,113 @@ var MyToolkit = (function() {
         };
 
     };
-return {Button, Checkbox, RadioGroup}
+
+    var TextBox = function() {
+        var draw = SVG().addTo('body').size('100%','100%');
+        var group = draw.group();
+
+        var rect = group.rect(200, 30).fill(white).radius(5);
+        rect.stroke({ color: teal, width: 3 });
+        rect.addClass('box');
+
+        var text = group.text("").x(10).y(-2).font({
+            family: 'Gill Sans',
+            size: 18,
+            fill: teal
+        });
+
+        var caret = group.line(10, 5, 10, 25).stroke({ width: 1, color: white });
+        var isFocused = false;
+
+        var textChange = null;
+        var stateChange = null;
+
+        group.click(function(event) {
+            isFocused = true;
+            caret.stroke({ width: 2, color: light_teal });
+            if (stateChange != null)
+                stateChange(event);
+        });
+
+        group.mouseover(function(event) {
+            if (stateChange != null)
+                stateChange(event);
+        });
+
+        group.mouseout(function(event) {
+            if (stateChange != null)
+                stateChange(event);
+        });
+
+        group.mouseup(function(event) {
+            if (stateChange != null)
+                stateChange(event);
+        });
+
+        group.mousedown(function(event) {
+            if (stateChange != null)
+                stateChange(event);
+        });
+
+        SVG.on(document, "click", function(event) {
+            if (event.target.className.baseVal != "box") {
+                isFocused = false;
+                caret.stroke({ width: 1, color: white });
+            }
+        });
+
+        SVG.on(document, "keydown", function(event) {
+            if (isFocused) {
+                if (event.keyCode !== 8 && !event.shiftKey) {
+                    if (text.length() < rect.width() - 25) {
+                        var input = "";
+                        input = text.text() + event.key;
+                        text.text(input);
+                        let inputLength = text.length();
+                        caret.plot(group.x() + inputLength + 12, group.y() + 5, group.x() + inputLength + 12, group.y() + 25);
+                        if (event.keyCode == 32) {
+                            caret.plot(group.x() + inputLength + 15, group.y() + 5, group.x() + inputLength + 15, group.y() + 25);
+                        }
+                    }
+                } else if (event.keyCode == 8) {
+                    var existing = text.text();
+                    var removed = existing.substring(0, existing.length - 1);
+                    text.text(removed);
+                    let removedLength = text.length();
+                    caret.plot(group.x() + removedLength + 12, group.y() + 5, group.x() + removedLength + 12, group.y() + 25);
+                } else if (event.shiftKey) {
+                    if (text.length() < rect.width() - 25) {
+                        var input = "";
+                        if (event.keyCode !== 16) {
+                            input = text.text() + String.fromCharCode(event.keyCode).toUpperCase();
+                        } else {
+                            input = text.text();
+                        }
+                        text.text(input);
+                        let inputLength = text.length();
+                        caret.plot(group.x() + inputLength + 12, group.y() + 5, group.x() + inputLength + 12, group.y() + 25);
+                    }
+                }
+
+                if (textChange != null) {
+                    textChange("text changed");
+                }
+            }
+        })
+
+        return {
+            move: function(x, y) {
+                group.move(x, y);
+            },
+            onTextChange: function(eventHandler) {
+                textChange = eventHandler;
+            },
+            onStateChange: function(eventHandler) {
+                stateChange = eventHandler;
+            },
+        };
+    };
+return {Button, Checkbox, RadioGroup, TextBox}
 }());
 
 export{MyToolkit}

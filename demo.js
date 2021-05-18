@@ -2,7 +2,7 @@ import {MyToolkit} from './mytoolkit.js';
 
 // Implement a MyToolkit Button
 var btn = new MyToolkit.Button;
-btn.move(100, 50);
+btn.move(100, 0);
 btn.setLabel("Click Me!");
 btn.onClick(function(e){
 	console.log(e.type);
@@ -38,5 +38,15 @@ radioGroup.onCheck(function(checkStatus) {
     console.log(checkStatus);
 })
 radioGroup.onStateChange(function(e) {
+    console.log(e.type);
+});
+
+// Implement a MyToolkit TextBox
+var textBox = new MyToolkit.TextBox;
+textBox.move(700, 10);
+textBox.onTextChange(function(textStatus) {
+    console.log(textStatus)
+})
+textBox.onStateChange(function(e) {
     console.log(e.type);
 });
