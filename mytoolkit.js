@@ -333,6 +333,9 @@ var MyToolkit = (function() {
             onStateChange: function(eventHandler) {
                 stateChange = eventHandler;
             },
+            getText: function() {
+                return text.text();
+            }
         };
     };
 return {Button, Checkbox, RadioGroup, TextBox}

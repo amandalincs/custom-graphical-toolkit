@@ -46,6 +46,7 @@ var textBox = new MyToolkit.TextBox;
 textBox.move(700, 10);
 textBox.onTextChange(function(textStatus) {
     console.log(textStatus)
+    console.log(textBox.getText());
 })
 textBox.onStateChange(function(e) {
     console.log(e.type);
