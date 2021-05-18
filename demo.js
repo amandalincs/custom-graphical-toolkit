@@ -63,3 +63,17 @@ scrollbar.onThumbMove(function(thumbStatus) {
 scrollbar.onStateChange(function(e) {
     console.log(e.type);
 });
+
+// Implement a MyToolkit Progress Bar
+var progressBar = new MyToolkit.ProgressBar;
+progressBar.move(300, 300);
+progressBar.setWidth(300);
+progressBar.setIncrement(100);
+console.log(progressBar.getIncrement());
+progressBar.incrementBar(100);
+progressBar.onIncrement(function(incrementStatus) {
+    console.log(incrementStatus);
+})
+progressBar.onStateChange(function(e) {
+    console.log(e.type);
+});

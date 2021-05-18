@@ -401,7 +401,78 @@ var MyToolkit = (function() {
             },
         };
     };
-return {Button, Checkbox, RadioGroup, TextBox, Scrollbar}
+
+    var ProgressBar = function() {
+        var group = draw.group();
+
+        var bar = group.rect(300, 20).fill(lightest_teal).radius(10);
+        bar.stroke({ color: light_teal, width: 3 });
+        var increment = 50;
+        var percent = group.rect(0, 20).fill(light_teal).radius(10);
+
+        var incrementEvent = null;
+        var stateChange = null;
+
+        group.mousedown(function(event) {
+            if (stateChange != null)
+                stateChange(event);
+        });
+
+        group.mouseover(function(event) {
+            if (stateChange != null)
+                stateChange(event);
+        });
+
+        group.mouseup(function(event) {
+            if (stateChange != null)
+                stateChange(event);
+        });
+
+        group.mouseout(function(event) {
+            if (stateChange != null)
+                stateChange(event);
+        });
+
+        // for (var i = 0; i < bar.width() / percent.width(); i++) {
+        //     percent.animate({
+        //         duration: 5000,
+        //         delay: 1000,
+        //         when: 'now',
+        //         wait: 500
+        //     }).width(percent.width() + increment * i);
+        // }
+
+        return {
+            move: function(x, y) {
+                group.move(x, y);
+            },
+            setWidth: function(newWidth) {
+                bar.width(newWidth);
+            },
+            setIncrement: function(newIncrement) {
+                increment = newIncrement;
+            },
+            getIncrement: function() {
+                return increment;
+            },
+            incrementBar: function(value) {
+                percent.animate({
+                    duration: 1000,
+                    delay: 1000,
+                    when: 'now',
+                    wait: 500
+                }).width(percent.width() + value);
+                console.log("progress incremented by " + value);
+            },
+            onIncrement: function(eventHandler) {
+                incrementEvent = eventHandler;
+            },
+            onStateChange: function(eventHandler) {
+                stateChange = eventHandler;
+            }
+        };
+    };
+return {Button, Checkbox, RadioGroup, TextBox, Scrollbar, ProgressBar}
 }());
 
 export{MyToolkit}
